@@ -12,7 +12,9 @@
 
         <th:block th:each="article : ${articles}">
             <div>
-                [[${article.id}]]
+                <a th:href="@{|/article/${article.id}|}">
+                    [[${article.id}]]
+                </a>
             </div>
             <div>
                 작성자 : [[${article.author.username}]]
