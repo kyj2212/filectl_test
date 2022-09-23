@@ -116,9 +116,10 @@ public class ArticleController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/list")
-    public String list(Model model, Principal principal, @RequestParam(defaultValue = "") String kwType, @RequestParam(defaultValue = "") String kw){
-
-        List<Article> articles = articleService.getForPrintArticlesByKeyword(principal.getName(),kw);
+    public String list(Model model, Principal principal, @RequestParam(defaultValue = "all") String kwType, @RequestParam(defaultValue = "") String kw){
+        List<Article> articles = kwType.equals("all")
+                ? articles=articleService.getForPrintArticlesByUsername(principal.getName())
+                : articleService.getForPrintArticlesByKeyword(principal.getName(),kw);
 
         model.addAttribute("articles",articles);
         return "/member/article_list";

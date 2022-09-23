@@ -62,14 +62,7 @@ public class ArticleService {
         article.getExtra().put("hashTags",hashTags);
         return article;
     }
-    public List<Article> getForPrintArticles(String username){
-        List<Article> articles = articleRepository.findByAuthorUsername(username);
-        for(Article article: articles){
-            List<HashTag> hashTags = hashTagService.getHashTags(article);
-            article.getExtra().put("hashTags",hashTags);
-        }
-        return articles;
-    }
+
     public void modify(Article article, String subject, String content) {
         article.setSubject(subject);
         article.setContent(content);
@@ -78,17 +71,19 @@ public class ArticleService {
     public List<Article> getArticles(String username){
         return articleRepository.findByAuthorUsername(username);
     }
-
-    public List<Article> getForPrintArticlesByKeyword(String username, String keyword) {
-        List<Article> articles = articleRepository.getArticlesByUsernameAndKeyword(username, keyword);
-//        List<Article> articles = articleRepository.getArticlesByUsername(username);
-//        List<Article> articles = articleRepository.getArticlesByKeyword(keyword);
-
-        log.debug("articles : "+articles);
+    public List<Article> getForPrintArticles(List<Article> articles){
         for(Article article: articles){
             List<HashTag> hashTags = hashTagService.getHashTags(article);
             article.getExtra().put("hashTags",hashTags);
         }
         return articles;
+    }
+    public List<Article> getForPrintArticlesByUsername(String username) {
+        List<Article> articles = articleRepository.getArticlesByUsername(username);
+        return getForPrintArticles(articles);
+    }
+    public List<Article> getForPrintArticlesByKeyword(String username, String keyword) {
+        List<Article> articles = articleRepository.getArticlesByUsernameAndKeyword(username, keyword);
+        return getForPrintArticles(articles);
     }
 }
