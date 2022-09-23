@@ -20,7 +20,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
                 .select(article)
                 .from(article)
                 .leftJoin(hashTag)
-                .on(hashTag.article.id.eq(article.id))
+                .on(hashTag.article.eq(article))
                 .where(hashTag.keyword.content.eq(keywordContent).and(article.author.username.eq(username)))
                 .orderBy(article.createDate.desc())
                 .fetch();
