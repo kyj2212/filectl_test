@@ -8,6 +8,7 @@ import com.ll.exam.app10.app.hashtag.entity.HashTag;
 import com.ll.exam.app10.app.hashtag.service.HashTagService;
 import com.ll.exam.app10.app.member.entity.Member;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final GenFileService genFileService;
@@ -75,5 +77,18 @@ public class ArticleService {
     }
     public List<Article> getArticles(String username){
         return articleRepository.findByAuthorUsername(username);
+    }
+
+    public List<Article> getForPrintArticlesByKeyword(String username, String keyword) {
+        List<Article> articles = articleRepository.getArticlesByUsernameAndKeyword(username, keyword);
+//        List<Article> articles = articleRepository.getArticlesByUsername(username);
+//        List<Article> articles = articleRepository.getArticlesByKeyword(keyword);
+
+        log.debug("articles : "+articles);
+        for(Article article: articles){
+            List<HashTag> hashTags = hashTagService.getHashTags(article);
+            article.getExtra().put("hashTags",hashTags);
+        }
+        return articles;
     }
 }
