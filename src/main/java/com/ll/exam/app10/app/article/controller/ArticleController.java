@@ -114,5 +114,26 @@ public class ArticleController {
         return "redirect:/article/%d?msg=%s".formatted(id, msg);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/list")
+    public String list(Model model, Principal principal, @RequestParam(defaultValue = "") String kwType, @RequestParam(defaultValue = "") String kw){
 
+        List<Article> articles = articleService.getForPrintArticles(principal.getName());
+        List<Article> articles_kw = new ArrayList<>();
+        if(kwType.equals("")){
+            articles_kw=articles;
+        }
+        for(Article article : articles){
+            List<HashTag> hashTags = hashTagService.getHashTags(article);
+            log.debug("tags : "+ hashTags);
+            for(HashTag hashTag : hashTags){
+                log.debug("tag : "+ hashTag.getKeyword().getContent());
+                if(hashTag.getKeyword().getContent().equals(kw)){
+                    articles_kw.add(article);
+                }
+            }
+        }
+        model.addAttribute("articles",articles_kw);
+        return "/member/article_list";
+    }
 }

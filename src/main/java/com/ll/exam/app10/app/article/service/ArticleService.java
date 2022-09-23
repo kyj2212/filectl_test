@@ -60,7 +60,14 @@ public class ArticleService {
         article.getExtra().put("hashTags",hashTags);
         return article;
     }
-
+    public List<Article> getForPrintArticles(String username){
+        List<Article> articles = articleRepository.findByAuthorUsername(username);
+        for(Article article: articles){
+            List<HashTag> hashTags = hashTagService.getHashTags(article);
+            article.getExtra().put("hashTags",hashTags);
+        }
+        return articles;
+    }
     public void modify(Article article, String subject, String content) {
         article.setSubject(subject);
         article.setContent(content);

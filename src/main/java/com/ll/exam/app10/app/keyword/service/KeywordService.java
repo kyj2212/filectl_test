@@ -31,5 +31,7 @@ public class KeywordService {
         return keyword;
     }
 
-
+    public Keyword findByContent(String content) {
+        return keywordRepository.findByContent(content).get();
+    }
 }
